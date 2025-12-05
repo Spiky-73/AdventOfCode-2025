@@ -3,6 +3,7 @@ use std::io::BufReader;
 mod day01_secret_entrance;
 mod day02_gift_shop;
 mod day03_lobby;
+mod day04_printing_department;
 
 fn main() {
     let day = std::env::args()
@@ -23,6 +24,8 @@ fn main() {
         022 => day02_gift_shop::solve_p2(BufReader::new(std::io::stdin())),
         031 => day03_lobby::solve_p1(BufReader::new(std::io::stdin())),
         032 => day03_lobby::solve_p2(BufReader::new(std::io::stdin())),
+        041 => day04_printing_department::solve_p1(BufReader::new(std::io::stdin())),
+        042 => day04_printing_department::solve_p2(BufReader::new(std::io::stdin())),
         _ => panic!("Not solution for this day yet"),
     };
 }
