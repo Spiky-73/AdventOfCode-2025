@@ -4,6 +4,7 @@ mod day01_secret_entrance;
 mod day02_gift_shop;
 mod day03_lobby;
 mod day04_printing_department;
+mod day05_cafeteria;
 
 fn main() {
     let day = std::env::args()
@@ -26,6 +27,8 @@ fn main() {
         032 => day03_lobby::solve_p2(BufReader::new(std::io::stdin())),
         041 => day04_printing_department::solve_p1(BufReader::new(std::io::stdin())),
         042 => day04_printing_department::solve_p2(BufReader::new(std::io::stdin())),
+        051 => day05_cafeteria::solve_p1(BufReader::new(std::io::stdin())),
+        052 => day05_cafeteria::solve_p2(BufReader::new(std::io::stdin())),
         _ => panic!("Not solution for this day yet"),
     };
 }
