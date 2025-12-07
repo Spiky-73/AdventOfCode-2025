@@ -6,6 +6,7 @@ mod day03_lobby;
 mod day04_printing_department;
 mod day05_cafeteria;
 mod day06_trash_compactor;
+mod day07_laboratories;
 
 fn main() {
     let day = std::env::args()
@@ -32,6 +33,8 @@ fn main() {
         052 => day05_cafeteria::solve_p2(BufReader::new(std::io::stdin())),
         061 => day06_trash_compactor::solve_p1(BufReader::new(std::io::stdin())),
         062 => day06_trash_compactor::solve_p2(BufReader::new(std::io::stdin())),
+        071 => day07_laboratories::solve_p1(BufReader::new(std::io::stdin())),
+        072 => day07_laboratories::solve_p2(BufReader::new(std::io::stdin())),
         _ => panic!("Not solution for this day yet"),
     };
 }
