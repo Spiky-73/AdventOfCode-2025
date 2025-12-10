@@ -8,6 +8,7 @@ mod day05_cafeteria;
 mod day06_trash_compactor;
 mod day07_laboratories;
 mod day08_playground;
+mod day09_move_theater;
 
 fn main() {
     let day = std::env::args()
@@ -38,6 +39,8 @@ fn main() {
         072 => day07_laboratories::solve_p2(BufReader::new(std::io::stdin())),
         081 => day08_playground::solve_p1(BufReader::new(std::io::stdin())),
         082 => day08_playground::solve_p2(BufReader::new(std::io::stdin())),
+        091 => day09_move_theater::solve_p1(BufReader::new(std::io::stdin())),
+        092 => day09_move_theater::solve_p2(BufReader::new(std::io::stdin())),
         _ => panic!("Not solution for this day yet"),
     };
 }
