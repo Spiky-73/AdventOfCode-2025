@@ -1,7 +1,26 @@
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{BinaryHeap, HashMap, VecDeque},
     io::BufRead,
 };
+
+#[derive(Eq, PartialEq)]
+struct State {
+    estimated_weight: usize,
+    weight: usize,
+    state: Vec<usize>,
+}
+
+impl PartialOrd for State {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for State {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        other.estimated_weight.cmp(&self.estimated_weight)
+    }
+}
 
 pub fn solve_p1<F: BufRead>(input: F) {
     let mut total_presses = 0;
@@ -50,7 +69,7 @@ pub fn solve_p2<F: BufRead>(input: F) {
     let mut total_presses = 0;
     for line in input.lines().map(|l| l.unwrap()) {
         let parts: Vec<&str> = line.split(' ').collect();
-        let final_joltage: Vec<usize> = parts[parts.len() - 1][1..parts[parts.len() - 1].len() - 1]
+        let end_state: Vec<usize> = parts[parts.len() - 1][1..parts[parts.len() - 1].len() - 1]
             .split(',')
             .map(|v| v.parse().unwrap())
             .collect();
@@ -66,38 +85,49 @@ pub fn solve_p2<F: BufRead>(input: F) {
 
         print!(
             "{{{}}}: ",
-            final_joltage
+            end_state
                 .iter()
                 .map(|v| v.to_string())
                 .collect::<Vec<String>>()
                 .join(",")
         );
-        let mut states: VecDeque<(Vec<usize>, usize)> = VecDeque::new();
-        states.push_back((final_joltage.iter().map(|_| 0).collect(), 0));
-        let mut best_count: HashMap<Vec<usize>, usize> = HashMap::new();
+        let mut states: BinaryHeap<State> = BinaryHeap::new();
+        states.push(State {
+            estimated_weight: 0,
+            weight: 0,
+            state: end_state.iter().map(|_| 0).collect(),
+        });
+        let mut weights: HashMap<Vec<usize>, usize> = HashMap::new();
 
-        'state: while states.len() > 0 {
-            let (joltage, depth) = states.pop_front().unwrap();
-            if joltage == final_joltage {
-                total_presses += depth;
-                println!("{}", depth);
+        while let Some(State { weight, state, .. }) = states.pop() {
+            if state == end_state {
+                total_presses += weight;
+                println!("{}", weight);
                 break;
             }
-            for i in 0..joltage.len() {
-                if joltage[i] > final_joltage[i] {
-                    continue 'state;
-                }
-            }
-            if best_count.get(&joltage).is_some_and(|d| d <= &depth) {
-                continue;
-            }
-            best_count.insert(joltage.clone(), depth);
-            for button in all_buttons.iter() {
-                let mut b_joltage = joltage.clone();
+            'state: for button in all_buttons.iter() {
+                let mut next_state = state.clone();
                 for &index in button.iter() {
-                    b_joltage[index] += 1;
+                    next_state[index] += 1;
                 }
-                states.push_back((b_joltage, depth + 1));
+                let weight = weight + 1;
+                for i in 0..next_state.len() {
+                    if next_state[i] > end_state[i] {
+                        continue 'state;
+                    }
+                }
+                if weights.get(&next_state).is_some_and(|&w| weight < w) {
+                    continue;
+                }
+                let estimated_weight: usize =
+                    weight + end_state.iter().sum::<usize>() - next_state.iter().sum::<usize>();
+
+                weights.insert(next_state.clone(), weight);
+                states.push(State {
+                    estimated_weight: estimated_weight,
+                    weight: weight,
+                    state: next_state,
+                });
             }
         }
     }
