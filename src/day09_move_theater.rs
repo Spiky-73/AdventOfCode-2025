@@ -1,4 +1,4 @@
-use std::{collections::HashSet, io::BufRead};
+use std::io::BufRead;
 
 pub fn solve_p1<F: BufRead>(input: F) {
     let red_tiles: Vec<Vec<usize>> = input
